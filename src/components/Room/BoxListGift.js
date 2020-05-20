@@ -11,6 +11,7 @@ import img_product01 from '../../../src/img/img_product01.png';
 
 import useParticipants from '../../hooks/useParticipants/useParticipants';
 // import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
+// require('dotenv').config();
 
 const listData = [
   {
@@ -80,7 +81,6 @@ const BoxListGift = ({ onClickBoxClose }) => {
       return;
     }
     socket.emit('send-gift', { from: localStorage.getItem('username'), to: identity, gift: giftSelected });
-    console.log(`${giftSelected.name} was send to ${identity}`);
   };
 
   useEffect(() => {
@@ -88,7 +88,7 @@ const BoxListGift = ({ onClickBoxClose }) => {
     let roomName = url[url.length - 1];
     axios({
       method: 'GET',
-      url: `http://192.168.1.216:8081/participants?roomName=${roomName}`,
+      url: `${process.env.REACT_APP_SERVER_URL}/participants?roomName=${roomName}`,
     }).then(response => {
       setListParticipants(response.data.participants);
     });

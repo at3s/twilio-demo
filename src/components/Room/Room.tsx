@@ -50,7 +50,6 @@ export default function Room() {
     socket.on('data-gift-from-server', function(data: any) {
       setGiftData(data);
       if (giftData.to === localStorage.getItem('username')) {
-        console.log(`${giftData.from} send a gift to you!! tadaaaa`);
         setReceivedGiftBox(true);
         setContainerGift(false);
       }
