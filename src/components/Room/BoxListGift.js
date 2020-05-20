@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@material-ui/core/styles';
 import axios from 'axios';
-import socket from './socket';
 
+import './Responsive.css';
+import socket from './socket';
 import ic_close from '../../../src/img/ic-close.png';
 import img_gift_pc from '../../../src/img/img_gift_pc.png';
 import bg_product from '../../../src/img/bg_product.png';
@@ -63,7 +64,7 @@ const BoxListGift = ({ onClickBoxClose }) => {
 
   const handleClickGift = (title, price) => {
     alert(`${title}, ${price}  was selected,select user to send gift!`);
-    setGiftSelected([title, price]);
+    setGiftSelected({ name: title, price });
   };
 
   const handleSendGift = identity => {
@@ -79,7 +80,7 @@ const BoxListGift = ({ onClickBoxClose }) => {
       return;
     }
     socket.emit('send-gift', { from: localStorage.getItem('username'), to: identity, gift: giftSelected });
-    console.log(`${giftSelected} was send to ${identity}`);
+    console.log(`${giftSelected.name} was send to ${identity}`);
   };
 
   useEffect(() => {
@@ -102,21 +103,32 @@ const BoxListGift = ({ onClickBoxClose }) => {
         <Title>
           <img src={img_gift_pc} alt="img_gift_pc" />
         </Title>
-        <DropDown onClick={() => setHideOptions(!hideOptions)}>
-          {userSelected}
-          {hideOptions && (
-            <ul style={{ margin: 0 }}>
-              {listParticipants.map(participant => (
-                <ParticipantItem
-                  name={participant.identity}
-                  onClick={() => handleSendGift(participant.identity)}
-                  key={participant.sid}
-                />
-              ))}
-            </ul>
-          )}
-        </DropDown>
-        <ListGift>
+        <div
+          style={{
+            width: '100%',
+            textAlign: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            position: 'absolute',
+            top: '15%',
+          }}
+        >
+          <DropDown onClick={() => setHideOptions(!hideOptions)}>
+            {userSelected}
+            {hideOptions && (
+              <ul style={{ margin: 0, padding: 0, height: 'auto', position: 'absolute' }}>
+                {listParticipants.map(participant => (
+                  <ParticipantItem
+                    name={participant.identity}
+                    onClick={() => handleSendGift(participant.identity)}
+                    key={participant.sid}
+                  />
+                ))}
+              </ul>
+            )}
+          </DropDown>
+        </div>
+        <ListGift className="list-gift">
           <ul
             style={{
               padding: '0 32px 32px 32px',
@@ -158,26 +170,24 @@ const ParticipantItem = ({ name, onClick }) => {
 
 const DropDown = styled('div')({
   position: 'relative',
-  left: 'calc(50% - 150px)',
   zIndex: 123,
   textAlign: 'center',
   height: 'auto',
-  minHeight: '65px',
+  minHeight: '35px',
   width: '300px',
   borderColor: '#ccc',
   borderStyle: 'solid',
   borderWidth: '2px',
   borderRadius: '8px',
   color: '#000',
-  lineHeight: '65px',
+  lineHeight: '35px',
   userSelect: 'none',
   cursor: 'pointer',
   fontSize: '20px',
 });
 
 const OPTION = styled('li')({
-  position: 'absolute',
-  top: '65px',
+  top: '35px',
   width: '300px',
   left: 0,
   listStyleType: 'none',
@@ -187,6 +197,7 @@ const OPTION = styled('li')({
   height: '30px',
   lineHeight: '30px',
   margin: '5px 0',
+  borderRadius: '10px',
 });
 
 const wrapStyle = {
@@ -201,7 +212,7 @@ const wrapStyle = {
 
 const Container = styled('div')({
   position: 'absolute',
-  top: '55%',
+  top: '50%',
   left: '50%',
 
   backgroundColor: '#fff',

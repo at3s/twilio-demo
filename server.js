@@ -42,8 +42,18 @@ io.on('connection', socket => {
   });
 });
 
-app.get('/token', (req, res) => {
+async function getConnectedParticipants(roomName) {
+  const client = new Twilio(twilioApiKeySID, twilioApiKeySecret, { accountSid: twilioAccountSid });
+
+  let list = await client.video.rooms(roomName).participants.list({ status: 'connected' });
+
+  return list;
+}
+
+app.get('/token', async (req, res) => {
   const { identity, roomName } = req.query;
+  let connectedParticipants = await getConnectedParticipants(roomName);
+  console.log(connectedParticipants.length);
   const token = new AccessToken(twilioAccountSid, twilioApiKeySID, twilioApiKeySecret, {
     ttl: MAX_ALLOWED_SESSION_DURATION,
   });
@@ -55,14 +65,6 @@ app.get('/token', (req, res) => {
 });
 
 // app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'build/index.html')));
-
-async function getConnectedParticipants(roomName) {
-  const client = new Twilio(twilioApiKeySID, twilioApiKeySecret, { accountSid: twilioAccountSid });
-
-  let list = await client.video.rooms(roomName).participants.list({ status: 'connected' });
-
-  return list;
-}
 
 app.get('/participants', async (req, res) => {
   let { roomName } = req.query;

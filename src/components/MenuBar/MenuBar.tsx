@@ -89,6 +89,7 @@ export default function MenuBar() {
     if (!window.location.origin.includes('twil.io')) {
       window.history.replaceState(null, '', window.encodeURI(`/room/${roomName}${window.location.search || ''}`));
     }
+    // set limit user here
     getToken(name, roomName).then(token => connect(token));
   };
 
