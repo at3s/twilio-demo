@@ -80,6 +80,7 @@ const BoxListGift = ({ onClickBoxClose }) => {
       alert('Please select a gift to send!');
       return;
     }
+    alert('Success!');
     socket.emit('send-gift', { from: localStorage.getItem('username'), to: identity, gift: giftSelected });
   };
 
@@ -95,22 +96,23 @@ const BoxListGift = ({ onClickBoxClose }) => {
   }, [participants]);
 
   return (
-    <Container>
+    <Container id="box-list-gift">
       <div style={wrapStyle}>
-        <BoxClose onClick={onClickBoxClose}>
+        <BoxClose id="btn-close-list-gift" onClick={onClickBoxClose}>
           <img src={ic_close} alt="button close" />
         </BoxClose>
-        <Title>
+        <Title id="box-list-gift-img">
           <img src={img_gift_pc} alt="img_gift_pc" />
         </Title>
         <div
+          id="select-user"
           style={{
             width: '100%',
             textAlign: 'center',
             display: 'flex',
             justifyContent: 'center',
             position: 'absolute',
-            top: '15%',
+            top: '100px',
           }}
         >
           <DropDown onClick={() => setHideOptions(!hideOptions)}>
@@ -128,7 +130,7 @@ const BoxListGift = ({ onClickBoxClose }) => {
             )}
           </DropDown>
         </div>
-        <ListGift className="list-gift">
+        <ListGift id="list-gift">
           <ul
             style={{
               padding: '0 32px 32px 32px',

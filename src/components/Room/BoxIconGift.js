@@ -1,10 +1,11 @@
 import React from 'react';
 import { styled } from '@material-ui/core/styles';
 import boxIconImg from '../../../src/img/icon_gift.png';
+import './Responsive.css';
 
 const BoxIconGift = ({ onClick }) => {
   return (
-    <BoxIcon onClick={onClick}>
+    <BoxIcon id="toggle-list-gift" onClick={onClick}>
       <img src={boxIconImg} alt="Box Icon Img" />
     </BoxIcon>
   );

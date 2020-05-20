@@ -1,5 +1,57 @@
-@media only screen and (max-width: 600px) {
-  .list-gift {
-    display: none;
+@media only screen and (max-width: 768px) {
+  #box-list-gift {
+    width: calc(100vw - 50px);
+    height: 90%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-top: 90px;
+  }
+  #btn-close-list-gift {
+    right: 0;
+    top: -90px;
+  }
+  #toggle-list-gift {
+    right: 15px;
+  }
+  #received-gift {
+    height: 90%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  #received-gift > div {
+    text-align: center !important;
+  }
+  #received-gift div div {
+    position: unset;
+  }
+  #received-gift-img {
+    left: 0;
+    position: unset;
+  }
+  #received-gift-img img {
+    width: 80% !important;
+  }
+  #toggle-received-gift {
+    top: 0;
+    right: 0;
+  }
+}
+@media only screen and (max-width: 480px) {
+  #box-list-gift-img {
+    left: 0;
+  }
+  #box-list-gift-img img {
+    width: 100%;
+  }
+  #list-gift ul {
+    justify-content: center !important;
+    margin-top: 65px !important;
+  }
+  #select-user {
+    left: 0;
+  }
+  #select-user > div {
+    padding: 5px 30px;
+    width: auto;
   }
 }

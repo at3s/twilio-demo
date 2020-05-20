@@ -6,12 +6,12 @@ import ic_close from '../../../src/img/ic-close.png';
 
 const ReceiveGift = ({ from, to, gift, onClick }) => {
   return (
-    <Container>
+    <Container id="received-gift">
       <div style={wrapStyle}>
-        <BoxClose onClick={() => onClick()}>
+        <BoxClose id="toggle-received-gift" onClick={() => onClick()}>
           <img src={ic_close} alt="button close" />
         </BoxClose>
-        <Title>
+        <Title id="received-gift-img">
           <img style={{ width: '120%' }} src={happy} alt="happy" />
         </Title>
         <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', padding: '32px' }}>
