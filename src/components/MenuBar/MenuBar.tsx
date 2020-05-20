@@ -16,6 +16,8 @@ import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
 import { Typography } from '@material-ui/core';
 import FlipCameraButton from './FlipCameraButton/FlipCameraButton';
 import { DeviceSelector } from './DeviceSelector/DeviceSelector';
+import logo from '../../img/logo.png';
+import '../Room/Responsive.css';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,13 +91,26 @@ export default function MenuBar() {
     if (!window.location.origin.includes('twil.io')) {
       window.history.replaceState(null, '', window.encodeURI(`/room/${roomName}${window.location.search || ''}`));
     }
-    // set limit user here
-    getToken(name, roomName).then(token => connect(token));
+    getToken(name, roomName).then(token => {
+      if (!token) {
+        alert(`${roomName} is full, please select another room (limit ${process.env.REACT_APP_CLIENT_LIMIT} user)`);
+        return;
+      }
+      connect(token);
+    });
   };
 
   return (
     <AppBar className={classes.container} position="static">
       <Toolbar className={classes.toolbar}>
+        <a
+          href="/"
+          id="app-logo"
+          data-user-status={roomState === 'connected' ? '' : 'disconnect'}
+          style={{ width: '10%' }}
+        >
+          <img style={{ width: '100%' }} src={logo} alt="logo" />
+        </a>
         {roomState === 'disconnected' ? (
           <form className={classes.form} onSubmit={handleSubmit}>
             {window.location.search.includes('customIdentity=true') || !user?.displayName ? (
@@ -132,7 +147,7 @@ export default function MenuBar() {
             {(isConnecting || isFetching) && <CircularProgress className={classes.loadingSpinner} />}
           </form>
         ) : (
-          <h3>{roomName}</h3>
+          <h4>Room name: {roomName}</h4>
         )}
         <div className={classes.rightButtonContainer}>
           <FlipCameraButton />
