@@ -55,7 +55,11 @@ async function getConnectedParticipants(roomName) {
 app.get('/token', async (req, res) => {
   const { identity, roomName } = req.query;
   let connectedParticipants = await getConnectedParticipants(roomName);
-  console.log(connectedParticipants.length);
+  // if first user connect . connectedParticipants.length = 0;
+  if (connectedParticipants.length + 1 > parseInt(process.env.REACT_APP_CLIENT_LIMIT)) {
+    res.send(null);
+    return;
+  }
   const token = new AccessToken(twilioAccountSid, twilioApiKeySID, twilioApiKeySecret, {
     ttl: MAX_ALLOWED_SESSION_DURATION,
   });
@@ -74,4 +78,6 @@ app.get('/participants', async (req, res) => {
   res.status(200).json({ participants: connectedParticipants });
 });
 
-server.listen(8081, () => console.log('token server running on 8081'));
+server.listen(8081, () => {
+  console.log('token server running on 8081');
+});
