@@ -45,6 +45,7 @@
   }
   #box-list-gift-img {
     left: 0;
+    top: -100px;
   }
   #box-list-gift-img img {
     width: 100%;
