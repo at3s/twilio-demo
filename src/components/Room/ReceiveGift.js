@@ -16,11 +16,11 @@ const ReceiveGift = ({ from, to, gift, onClick }) => {
         </Title>
         <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', padding: '32px' }}>
           <Content>
-            <Text>You received</Text>
-            <span style={{ fontSize: '34px' }}>{`${gift.name} (${gift.price})`}</span>
-            <Text>from {`${from}`}</Text>
+            <Text>{`${from} さんから`}</Text>
+            <span style={{ fontSize: '30px' }}>{`${gift.name}`}</span>
+            <Text>が届きました !</Text>
           </Content>
-          <Button onClick={() => onClick()}>OK</Button>
+          <Button onClick={() => onClick()}>受け取る</Button>
         </div>
       </div>
     </Container>
@@ -77,6 +77,7 @@ const Content = styled('div')({
   width: '100%',
   textAlign: 'center',
   color: '#000',
+  marginBottom: '10px',
 });
 
 const Button = styled('button')({

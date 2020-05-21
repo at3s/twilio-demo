@@ -8,6 +8,7 @@ import ic_close from '../../../src/img/ic-close.png';
 import img_gift_pc from '../../../src/img/img_gift_pc.png';
 import bg_product from '../../../src/img/bg_product.png';
 import img_product01 from '../../../src/img/img_product01.png';
+import arrow_down from '../../../src/img/arrow-down.png';
 
 import useParticipants from '../../hooks/useParticipants/useParticipants';
 // import useVideoContext from '../../hooks/useVideoContext/useVideoContext';
@@ -15,82 +16,64 @@ import useParticipants from '../../hooks/useParticipants/useParticipants';
 
 const listData = [
   {
-    title: 'Champage N’hnm',
+    title: 'ドン・ペリニヨン',
     img: img_product01,
     price: '100ポイント',
   },
   {
-    title: 'Champage N’hnm',
+    title: 'ヴーヴ ・クリコ -イエローラベル-',
     img: img_product01,
     price: '200ポイント',
   },
   {
-    title: 'Champage N’hnm',
+    title: 'カフェ・ド・パリ',
     img: img_product01,
     price: '300ポイント',
   },
   {
-    title: 'Champage N’hnm',
+    title: 'ドン・ペリニヨン (白)',
     img: img_product01,
     price: '400ポイント',
-  },
-  {
-    title: 'Champage N’hnm',
-    img: img_product01,
-    price: '500ポイント',
-  },
-  {
-    title: 'Champage N’hnm',
-    img: img_product01,
-    price: '600ポイント',
-  },
-  {
-    title: 'Champage N’hnm',
-    img: img_product01,
-    price: '700ポイント',
-  },
-  {
-    title: 'Champage N’hnm',
-    img: img_product01,
-    price: '800ポイント',
   },
 ];
 
 const BoxListGift = ({ onClickBoxClose }) => {
   let [listParticipants, setListParticipants] = useState([{ identity: 'loading...', sid: 'null' }]);
   let [hideOptions, setHideOptions] = useState(false);
-  let [userSelected, setUserSelected] = useState('Select an user');
-  let [giftSelected, setGiftSelected] = useState(null);
+  let [userSelected, setUserSelected] = useState('Select an username');
   const participants = useParticipants();
 
   const handleClickGift = (title, price) => {
-    alert(`${title}, ${price}  was selected,select user to send gift!`);
-    setGiftSelected({ name: title, price });
-  };
-
-  const handleSendGift = identity => {
-    // set item username to localStorage in /src/state/index.tsx (line 63)
-    if (identity === localStorage.getItem('username')) {
-      alert('Please select another username!');
-      return;
+    if (userSelected !== 'Select an username') {
+      socket.emit('send-gift', {
+        from: sessionStorage.getItem('username'),
+        to: userSelected,
+        gift: {
+          name: title,
+          price,
+        },
+      });
+      alert('Success!');
     }
-    setUserSelected(identity);
-
-    if (!giftSelected) {
-      alert('Please select a gift to send!');
-      return;
-    }
-    alert('Success!');
-    socket.emit('send-gift', { from: localStorage.getItem('username'), to: identity, gift: giftSelected });
   };
 
   useEffect(() => {
-    let roomName = localStorage.getItem('roomName');
+    let roomName = sessionStorage.getItem('roomName');
+    // set item username to sessionStorage in /src/state/index.tsx (line 63)
+    let username = sessionStorage.getItem('username');
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_SERVER_URL}/participants?roomName=${roomName}`,
     }).then(response => {
-      setListParticipants(response.data.participants);
+      // eslint-disable-next-line no-shadow
+      let participants = [];
+      for (let i of response.data.participants) {
+        if (i.identity !== username) {
+          participants.push(i);
+        }
+      }
+      setUserSelected('Select an username');
+      setListParticipants(participants);
     });
   }, [participants]);
 
@@ -111,17 +94,22 @@ const BoxListGift = ({ onClickBoxClose }) => {
             display: 'flex',
             justifyContent: 'center',
             position: 'absolute',
-            top: '100px',
+            top: '80px',
           }}
         >
           <DropDown onClick={() => setHideOptions(!hideOptions)}>
             {userSelected}
+            <img
+              src={arrow_down}
+              alt="arrow down"
+              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translate(-50%,-50%)' }}
+            />
             {hideOptions && (
-              <ul style={{ margin: 0, padding: 0, height: 'auto', position: 'absolute' }}>
+              <ul style={{ margin: 0, padding: 0, height: 'auto', position: 'absolute', left: '-1px' }}>
                 {listParticipants.map(participant => (
                   <ParticipantItem
                     name={participant.identity}
-                    onClick={() => handleSendGift(participant.identity)}
+                    onClick={() => setUserSelected(participant.identity)}
                     key={participant.sid}
                   />
                 ))}
@@ -176,10 +164,9 @@ const DropDown = styled('div')({
   height: 'auto',
   minHeight: '35px',
   width: '300px',
-  borderColor: '#ccc',
+  borderColor: '#000',
   borderStyle: 'solid',
   borderWidth: '2px',
-  borderRadius: '8px',
   color: '#000',
   lineHeight: '35px',
   userSelect: 'none',
@@ -192,13 +179,13 @@ const OPTION = styled('li')({
   width: '300px',
   left: 0,
   listStyleType: 'none',
-  backgroundColor: '#e0e0e0',
+  backgroundColor: '#fff',
   cursor: 'pointer',
   color: '#000',
   height: '30px',
   lineHeight: '30px',
   margin: '5px 0',
-  borderRadius: '10px',
+  border: '1px solid #000',
 });
 
 const wrapStyle = {
@@ -221,14 +208,14 @@ const Container = styled('div')({
   zIndex: 110,
 
   width: '880px',
-  height: '580px',
+  height: '380px',
   transform: `translate(-50%,-50%)`,
   borderRadius: '10px',
 });
 
 const Title = styled('span')({
   position: 'absolute',
-  top: '-100px',
+  top: '-165px',
   width: '100%',
   textAlign: 'center',
   zIndex: 111,

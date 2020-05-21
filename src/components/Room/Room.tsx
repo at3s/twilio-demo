@@ -49,7 +49,7 @@ export default function Room() {
   useEffect(() => {
     socket.on('data-gift-from-server', function(data: any) {
       setGiftData(data);
-      if (giftData.to === localStorage.getItem('username')) {
+      if (giftData.to === sessionStorage.getItem('username')) {
         setReceivedGiftBox(true);
         setContainerGift(false);
       }
