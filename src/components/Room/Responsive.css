@@ -13,6 +13,9 @@
   #toggle-list-gift {
     right: 15px;
   }
+  #toggle-list-gift img {
+    width: 50%;
+  }
   #received-gift {
     height: 90%;
     overflow-y: scroll;
