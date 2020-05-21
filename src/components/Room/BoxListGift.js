@@ -85,8 +85,7 @@ const BoxListGift = ({ onClickBoxClose }) => {
   };
 
   useEffect(() => {
-    let url = window.location.href.split('/');
-    let roomName = url[url.length - 1];
+    let roomName = localStorage.getItem('roomName');
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_SERVER_URL}/participants?roomName=${roomName}`,

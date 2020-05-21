@@ -96,6 +96,7 @@ export default function MenuBar() {
         alert(`${roomName} is full, please select another room (limit ${process.env.REACT_APP_CLIENT_LIMIT} user)`);
         return;
       }
+      localStorage.setItem('roomName', roomName);
       connect(token);
     });
   };
