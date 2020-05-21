@@ -60,7 +60,7 @@ export default function AppStateProvider(props: React.PropsWithChildren<{}>) {
         const params = new window.URLSearchParams({ identity, roomName });
 
         return fetch(`${endpoint}?${params}`, { headers }).then(res => {
-          localStorage.setItem('username', identity);
+          sessionStorage.setItem('username', identity);
           return res.text();
         });
       },
